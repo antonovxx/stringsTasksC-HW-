@@ -1,4 +1,5 @@
 //Реализовать следующие функции для работы со строками:
+//PART1
 //     1. Подсчитать длину строки
 //     2. Подсчитать количество слов в строке
 //     3. Перевести строку в верхний регистр
@@ -13,8 +14,24 @@
 //     12. Конкатинации строк, то есть добавления второй строки в конец первой
 //     13. Получение подстроки, состоящей из первых n символов строки, если n>=динны строки, то необходимо выдать всю строку ???
 
-#include <iostream>
+//PART 2
+//bool is_palindrome(char str[]);    DONE //Проверяет, является ли строка палиндромом (ого, или, 12321)
+//    bool is_int_number(char str[]);    DONE //Проверяет, является ли строка целым десятичным числом
+//    int  to_int_number(char str[]);    //Если строка - десятичное число, то функция возвращает его int-овое значение.
+//    bool is_bin_number(char str[]);    //Проверяет, является ли строка двоичным числом
+//    int  bin_to_dec(char str[]);    //Если строка - двоичное число, то функция возвращает его десятичное значение.
+//    bool is_hex_number(char str[]);    //Проверяет, является ли строка шестнадцатеричным числом
+//    int  hex_to_dec(char str[]);    //Если строка - шестнадцатеричное число, то функция возвращает его десятичное значение.
+//    bool is_mac_address(char str[]);//Проверяет, является ли строка MAC-адресом
+//    bool is_ip_address(char str[]);//Проверяет, является ли строка IP-адресом
 
+#include <iostream>
+#include <cmath>
+//#define PART_1
+#define PART_2
+
+
+// Part 1
 int StrLength(char* string, int count);
 int CountWords(char* string, int count);
 void StrUpper(char* string);
@@ -26,11 +43,23 @@ bool CheckString(char* string, char* string2, int count);
 void flipString(char* string, int size);
 void DeleteSigns(char* string);
 bool ComparisonString(char* string, char* string3, int count);
-void Concatination(char* string, char* string3, char* ResultString, int count);
+void Concatenation(char* string, char* string3, char* ResultString, int count);
+// Part 2
+bool is_palindrome(char str[]);
+bool is_int_number(char str[]);
+int  to_int_number(char str[], int n);    //Если строка - десятичное число, то функция возвращает его int-овое значение.
+bool is_bin_number(char str[]);    //Проверяет, является ли строка двоичным числом
+int  bin_to_dec(char str[]);    //Если строка - двоичное число, то функция возвращает его десятичное значение.
+bool is_hex_number(char str[]);    //Проверяет, является ли строка шестнадцатеричным числом
+int  hex_to_dec(char str[]);    //Если строка - шестнадцатеричное число, то функция возвращает его десятичное значение.
+bool is_mac_address(char str[]); //Проверяет, является ли строка MAC-адресом
+bool is_ip_address(char str[]); //Проверяет, является ли строка IP-адресом
 
 int main()
 {
     using namespace std;
+  
+#ifdef PART_1
     
     int count = 0;
     int size = 20;
@@ -79,12 +108,234 @@ int main()
     else
         cout << "This string are not equal" << endl;
     
-    Concatination(string, string3, ResultString, count);
-    cout << "Concatinated string: " << ResultString << endl;
+    Concatenation(string, string3, ResultString, count);
+    cout << "Concatenated string: " << ResultString << endl;
     
+#endif
+#ifdef PART_2
+    
+    int size = 255;
+    char str[size];
+    
+    cout << "Enter string: "; cin.getline(str, size);
+    
+    if(is_palindrome(str))
+        cout << "This string is palindrome"  << endl;
+    else
+        cout << "This string is not palindrome" << endl;
+    
+    if(is_int_number(str))
+        cout << "This is a number" << endl;
+    else
+        cout << "This is not a number" << endl;
+    
+    if(is_bin_number(str))
+        cout << "This is a bin number" << endl;
+    else
+        cout << "This is not a bin number" << endl;
+    
+    if(is_hex_number(str))
+        cout << "This is a hex number" << endl;
+    else
+        cout << "This is not a hex number" << endl;
+    
+    if(is_mac_address(str))
+        cout << "This is a mac adress" << endl;
+    else
+        cout << "This is not a mac adress" << endl;
+    
+    
+    if(is_ip_address(str))
+        cout << "This is an IP adress" << endl;
+    else
+        cout << "This is not an IP adress" << endl;
+    
+
+#endif
     
     return 0;
 }
+// Part 2
+
+
+bool is_palindrome(char* str)
+{
+    size_t tmp = strlen(str) - 1;
+    StrLower(str);
+    for (int i = 0, j = tmp; i <= tmp && j >= 0; ++i, --j)
+    {
+        if(str[i] != str[j])
+            return false;
+    }
+    return true;
+}
+
+bool is_int_number(char* str)
+{
+    while(*str)
+    {
+        if(!(*str >= '0' && *str <= '9'))
+            return false;
+        return is_int_number(str + 1);
+    }
+    return true;
+}
+int to_int_number(char* str, int n)
+{
+    int number = 0;
+    int count = 0;
+    for (int i = n - 1; i >= 0; --i)
+    {
+        number += (str[i] - 48) * pow(10, count);
+        ++count;
+    }
+    return number;
+}
+
+bool is_bin_number(char* str)
+{
+    if(!(str[0] == '0' && str[1] == 'b'))
+    {
+        return false;
+    }
+    for (int i = 2; str[i]; ++i)
+    {
+        if(!(str[i] >= '0' && str[i] <= '1'))
+            return false;
+    }
+    return true;
+}
+
+int bin_to_dec(char* str)
+{
+    int n = 0;
+    int  number = 0;
+    int count = 0;
+    for (int i = n - 1; i >= 0; --i)
+    {
+        if(str[i] == 49)
+        {
+            number += pow(2, count);
+            ++count;
+        }
+    }
+    return number;
+}
+bool is_hex_number(char* str)
+{
+    if(!(str[0] == '0' && str[1] == 'x'))
+    {
+        return false;
+    }
+    
+    for (int i = 2; str[i]; ++i)
+    {
+        if(!((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'a' && str[i] <= 'f')))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool is_mac_address(char* str)
+{
+    int n = 0;
+    if (!(str[n - 5] == '.' && str[n - 10] == '.' && n == 14))
+    {
+            return false;
+    }
+    for (int i = n - 1; i >= 0; --i)
+    {
+        if (!((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'a' && str[i] <= 'f') || (str[i] >= '.')))
+        {
+            return false;
+        }
+
+    }
+    return true;
+}
+bool is_ip_address(char* str)
+{
+    const int size = 3;
+    int n = 0;
+    int newSize = 0;
+    size_t counter = 0;
+    size_t index = 0;
+    size_t index2 = 0;
+    bool check = true;
+    char tmpStr1[size];
+    char tmpStr2[size];
+    char tmpStr3[size];
+    char tmpStr4[size];
+
+
+       if (n < 16 && n>6) {
+           for (int i = 0; i < n; ++i) {
+               if (!((str[i] >= '0' && str[i] <= '9') || str[i] == '.')) {
+                   check = false;
+               }
+           }
+
+           if (check) {
+
+               for (int i = 0; str[i] != '.'; ++i) {
+                   tmpStr1[i] = str[i];
+                   index = i;
+                   ++index2;
+               }
+               newSize = index2;
+               if (to_int_number(tmpStr1, newSize) >= 0 && to_int_number(tmpStr1, newSize) < 256) {
+                   ++counter;
+               };
+
+               index2 = 0;
+
+               for (int i = index + 2, j = 0; str[i] != '.'; ++i, ++j) {
+                   tmpStr2[j] = str[i];
+                   index = i;
+                   ++index2;
+               }
+               newSize = index2;
+               if (to_int_number(tmpStr2, newSize) >= 0 && to_int_number(tmpStr2, newSize) < 256) {
+                   ++counter;
+               };
+
+               index2 = 0;
+
+               for (int i = index + 2, j = 0; str[i] != '.'; ++i, ++j) {
+                   tmpStr3[j] = str[i];
+                   index = i;
+                   ++index2;
+               }
+               newSize = index2;
+               if (to_int_number(tmpStr3, newSize) >= 0 && to_int_number(tmpStr3, newSize) < 256) {
+                   ++counter;
+               };
+
+               index2 = 0;
+
+               for (int i = index + 2, j = 0; (str[i] >= '0' && str[i] <= '9'); ++i, ++j) {
+                   tmpStr4[j] = str[i];
+                   ++index2;
+               }
+               newSize = index2;
+               if (to_int_number(tmpStr4, newSize) >= 0 && to_int_number(tmpStr4, newSize) < 256) {
+                   ++counter;
+               };
+
+
+               if (counter == 4) {
+                   return true;
+               }
+           }
+       }
+       return false;
+}
+
+
+
+// Part 1
 
 int StrLength(char* string, int count)
 {
@@ -233,28 +484,28 @@ bool ComparisonString(char* string, char* string3, int count)
     return true;
 }
 
-//void Concatination(char* string, char* string3, char* ResultString)
-//{
-//    while(*string)
-//    {
-//        *ResultString = *string;
-//        return Concatination(string + 1, string3, ResultString + 1);
-//    }
-//    while(*string3)
-//    {
-//        *ResultString = *string3;
-//        return Concatination(string, string3 + 1, ResultString + 1);
-//    }
-//}
-
-void Concatination(char* string, char* string3, char* ResultString, int count)
+void Concatination(char* string, char* string3, char* ResultString)
 {
-    for (int i = 0; string[i]; ++i)
+    while(*string)
     {
-        ResultString[i] = string[i];
+        *ResultString = *string;
+        return Concatination(string + 1, string3, ResultString + 1);
     }
-    for (int i = 0; string3[i]; ++i)
+    while(*string3)
     {
-        ResultString[i + StrLength(string, count)] = string3[i];
+        *ResultString = *string3;
+        return Concatination(string, string3 + 1, ResultString + 1);
     }
 }
+
+//void Concatenation(char* string, char* string3, char* ResultString, int count)
+//{
+//    for (int i = 0; string[i]; ++i)
+//    {
+//        ResultString[i] = string[i];
+//    }
+//    for (int i = 0; string3[i]; ++i)
+//    {
+//        ResultString[i + StrLength(string, count)] = string3[i];
+//    }
+//}
